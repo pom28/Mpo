@@ -1,0 +1,67 @@
+body {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+}
+
+.love {
+  position: relative;
+}
+
+.character {
+  width: 150px;
+  height: 150px;
+  user-select: none;
+}
+
+.block {
+  position: absolute;
+  left: 150px;
+  top: 80px;
+}
+
+/* شكل القلب */
+.heart {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  background: red;
+  transform: rotate(-45deg);
+  animation: fly 2s ease-out forwards;
+}
+
+.heart::before,
+.heart::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: red;
+  border-radius: 50%;
+}
+
+.heart::before {
+  top: -15px;
+  left: 0;
+}
+
+.heart::after {
+  left: 15px;
+  top: 0;
+}
+
+/* حركة القلوب */
+@keyframes fly {
+  0% {
+    transform: translateY(0) scale(1) rotate(-45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-150px) scale(0.3) rotate(-45deg);
+    opacity: 0;
+  }
+}
