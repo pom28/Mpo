@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Our Cloud Project</title>
+<style>
+    :root {
+        --bg-light: #f5f5f5;
+        --text-light: #222;
+        --bg-dark: #1a1a1a;
+        --text-dark: #f5f5f5;
+        --accent: #0078ff;
+        --game-bg-light: #cce7ff;
+        --game-bg-dark: #333;
+    }
+
+    body {
+        font-family: "Poppins", sans-serif;
+        background-color: var(--bg-light);
+        color: var(--text-light);
+        margin: 0;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    body.dark {
+        background-color: var(--bg-dark);
+        color: var(--text-dark);
+    }
+
+    header {
+        padding: 20px 0;
+        background: var(--accent);
+        color: white;
+        font-size: 1.4rem;
+        letter-spacing: 1px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .toggle-theme {
+        margin: 15px;
+        padding: 8px 16px;
+        background: var(--accent);
+        border: none;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .toggle-theme:hover {
+        opacity: 0.8;
+    }
+
+    #game {
+        margin: 30px auto;
+        width: 600px;
+        height: 200px;
+        background-color: var(--game-bg-light);
+        border: 3px solid var(--accent);
+        overflow: hidden;
+        position: relative;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    body.dark #game {
+        background-color: var(--game-bg-dark);
+    }
+
+    #character {
+        width: 50px;
+        height: 50px;
+        background-color: #ff4757;
+        position: absolute;
+        bottom: 0;
+        left: 50px;
+        border-radius: 10px;
+    }
+
+    #block {
+        width: 50px;
+        height: 50px;
+        background-color: #2ed573;
+        position: absolute;
+        bottom: 0;
+        right: -60px;
+        animation: blockMove 2s infinite linear;
+    }
+
+    @keyframes blockMove {
+        0% { right: -60px; }
+        100% { right: 660px; }
+    }
+
+    .info {
+        margin-top: 15px;
+        font-size: 1rem;
+    }
+
+    #score {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 10px;
+        color: var(--accent);
+    }
+
+    footer {
+        margin-top: 25px;
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    a {
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+    <header>☁️ Cloud Jump Game</header>
+    <button class="toggle-theme" onclick="toggleTheme()">🌗 Toggle Theme</button>
+    <h1>Welcome to Our Cloud Project</h1>
+    <p class="info">We are Group X from DMD243. This project demonstrates cloud hosting and a fun interactive game!</p>
+    <p><a href="https://drive.google.com/your-folder-link" target="_blank">Visit Our Google Drive Folder</a></p>
+
+    <div id="score">Score: 0</div>
+
+    <div id="game">
+        <div id="character"></div>
+        <div id="block"></div>
+    </div>
+
+    <p class="info">Press SPACE to jump! Avoid the green block.</p>
+
+    <footer>Created by Group X | DMD243 Cloud Computing & Embedded Systems</footer>
+
+    <script>
+        const character = document.getElementById("character");
+        const block = document.getElementById("block");
+        const scoreDisplay = document.getElementById("score");
+        let isJumping = false;
+        let isAlive = true;
+        let score = 0;
+
+        // Jump function
+        document.addEventListener("keydown", function(event) {
+            if (event.code === "Space" && !isJumping) {
+                jump();
+            }
+        });
+
+        function jump() {
+            isJumping = true;
+            let position = 0;
+            const up = setInterval(() => {
+                if (position >= 100) {
+                    clearInterval(up);
+                    const down = setInterval(() => {
+                        if (position <= 0) {
+                            clearInterval(down);
+                            isJumping = false;
+                        }
+                        position -= 5;
+                        character.style.bottom = position + "px";
+                    }, 20);
+                }
+                position += 5;
+                character.style.bottom = position + "px";
+            }, 20);
+        }
+
+        // Game logic
+        const gameLoop = setInterval(() => {
+            const characterBottom = parseInt(window.getComputedStyle(character).getPropertyValue("bottom"));
+            const blockRight = parseInt(window.getComputedStyle(block).getPropertyValue("right"));
+            
+            if (blockRight > 500 && blockRight < 560 && characterBottom < 50) {
+                if (isAlive) {
+                    alert("💥 Game Over! Your final score: " + score);
+                    isAlive = false;
+                    block.style.animation = "none";
+                }
+            } else if (isAlive) {
+                score++;
+                scoreDisplay.textContent = "Score: " + score;
+            }
+        }, 200);
+
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle("dark");
+        }
+    </script>
+</body>
+</html>
